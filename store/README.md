@@ -37,12 +37,23 @@ each supported language.
 
 ## Privacy policy
 
-The store requires a public URL for the privacy policy. A minimal
-template:
+The store requires a public URL for the privacy policy. A bilingual
+(EN / FR) page is already prepared in [`../docs/`](../docs/) and is
+ready to publish via GitHub Pages.
 
-> StayActive does not collect, store or transmit any personal data.
-> The only state stored locally is the on/off preference, via the
-> chrome.storage.local API. No data ever leaves the user's browser.
+### Publish with GitHub Pages
 
-Host this text on a public URL (GitHub Pages, your own site, a Gist)
-and paste the link into the "Privacy practices" section.
+1. Push this repository to GitHub.
+2. In the repo settings: **Settings → Pages**.
+3. Under **Source**, select branch `main` and folder `/docs`.
+4. Save. After a minute the page will be live at:
+
+   ```
+   https://<your-username>.github.io/<repo-name>/
+   ```
+
+5. Paste that URL into the Chrome Web Store dashboard, under
+   **Privacy practices → Privacy policy URL**.
+
+The `docs/.nojekyll` file is present so GitHub Pages serves the
+static files as-is without Jekyll processing.

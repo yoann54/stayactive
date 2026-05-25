@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StayActive — Privacy Policy</title>
+    <meta name="description" content="Privacy policy for the StayActive Chrome extension." />
+    <link rel="icon" href="icon.png" type="image/png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="brand">
+        <img src="icon.png" alt="" width="48" height="48" />
+        <div>
+          <h1>StayActive</h1>
+          <p>Privacy Policy · Politique de confidentialité</p>
+        </div>
+      </div>
+      <nav class="lang">
+        <a href="#en" data-lang="en" class="active">EN</a>
+        <a href="#fr" data-lang="fr">FR</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="en" class="lang-section active" lang="en">
+        <p class="meta">Last updated: <time datetime="2026-05-25">May 25, 2026</time></p>
+
+        <h2>Summary</h2>
+        <p>
+          StayActive does <strong>not</strong> collect, store, or transmit any
+          personal information. The extension operates entirely on your device.
+        </p>
+
+        <h2>What the extension does</h2>
+        <p>
+          StayActive modifies the Page Visibility API and focus/blur events
+          inside web pages so that websites believe the current tab is always
+          active. It does not read, inspect, or alter the content of those
+          pages beyond this single behavioural change.
+        </p>
+
+        <h2>Data we store</h2>
+        <p>
+          The only data StayActive saves is your <em>on/off</em> preference.
+          It is stored locally via the <code>chrome.storage.local</code> API
+          and never leaves your browser. You can erase it at any time by
+          removing the extension.
+        </p>
+
+        <h2>Data we do <em>not</em> collect</h2>
+        <ul>
+          <li>No personally identifiable information</li>
+          <li>No browsing history or visited URLs</li>
+          <li>No page content, form input, or keystrokes</li>
+          <li>No analytics, telemetry, or crash reports</li>
+          <li>No authentication or financial data</li>
+        </ul>
+
+        <h2>Third parties</h2>
+        <p>
+          StayActive does not communicate with any third-party server. It
+          contains no remote code, no tracking scripts, no advertising SDKs.
+        </p>
+
+        <h2>Permissions</h2>
+        <ul>
+          <li>
+            <code>storage</code> — used solely to persist your on/off
+            preference between browser sessions.
+          </li>
+          <li>
+            <code>host_permissions: &lt;all_urls&gt;</code> — required to
+            inject the visibility-spoofing script into every page you visit
+            (so the feature works site-wide). No page data is read or
+            transmitted.
+          </li>
+        </ul>
+
+        <h2>Changes</h2>
+        <p>
+          If this policy ever changes, the updated version will be published
+          on this page with a new "Last updated" date.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          For any question about this policy, open an issue on the
+          project's repository or contact the maintainer.
+        </p>
+      </section>
+
+      <section id="fr" class="lang-section" lang="fr">
+        <p class="meta">Dernière mise à jour : <time datetime="2026-05-25">25 mai 2026</time></p>
+
+        <h2>Résumé</h2>
+        <p>
+          StayActive ne collecte, ne stocke et ne transmet
+          <strong>aucune</strong> donnée personnelle. L'extension fonctionne
+          intégralement sur votre appareil.
+        </p>
+
+        <h2>Ce que fait l'extension</h2>
+        <p>
+          StayActive modifie l'API Page Visibility et les évènements
+          focus/blur à l'intérieur des pages web pour que celles-ci croient
+          que l'onglet courant est toujours actif. Elle ne lit pas, n'inspecte
+          pas et ne modifie pas le contenu des pages au-delà de cet
+          ajustement comportemental.
+        </p>
+
+        <h2>Données conservées</h2>
+        <p>
+          La seule donnée enregistrée par StayActive est votre préférence
+          <em>activé/désactivé</em>. Elle est stockée localement via l'API
+          <code>chrome.storage.local</code> et ne quitte jamais votre
+          navigateur. Vous pouvez l'effacer à tout moment en supprimant
+          l'extension.
+        </p>
+
+        <h2>Données que nous <em>ne collectons pas</em></h2>
+        <ul>
+          <li>Aucune donnée personnelle identifiable</li>
+          <li>Aucun historique de navigation ni URL visitée</li>
+          <li>Aucun contenu de page, saisie de formulaire ou frappe clavier</li>
+          <li>Aucune analytique, télémétrie ou rapport de crash</li>
+          <li>Aucune donnée d'authentification ou financière</li>
+        </ul>
+
+        <h2>Tiers</h2>
+        <p>
+          StayActive ne communique avec aucun serveur tiers. Elle ne
+          contient ni code distant, ni script de tracking, ni SDK
+          publicitaire.
+        </p>
+
+        <h2>Permissions</h2>
+        <ul>
+          <li>
+            <code>storage</code> — sert uniquement à mémoriser votre
+            préférence activé/désactivé entre les sessions du navigateur.
+          </li>
+          <li>
+            <code>host_permissions: &lt;all_urls&gt;</code> — nécessaire
+            pour injecter le script de masquage de la visibilité sur
+            toutes les pages que vous visitez (afin que la fonctionnalité
+            soit disponible partout). Aucune donnée de page n'est lue ni
+            transmise.
+          </li>
+        </ul>
+
+        <h2>Modifications</h2>
+        <p>
+          Si cette politique évolue, la version mise à jour sera publiée
+          sur cette page avec une nouvelle date de "Dernière mise à jour".
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Pour toute question relative à cette politique, ouvrez une issue
+          sur le dépôt du projet ou contactez le mainteneur.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>StayActive · Open source Chrome extension</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
