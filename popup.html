@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>StayActive</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="card" data-state="on">
+      <header class="header">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="3.2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="title">
+          <h1>StayActive</h1>
+          <p id="tagline"></p>
+        </div>
+      </header>
+
+      <section class="status">
+        <div class="pulse" aria-hidden="true">
+          <span class="dot"></span>
+          <span class="ring"></span>
+        </div>
+        <div class="status-text">
+          <span class="status-label" id="statusLabel"></span>
+          <span class="status-detail" id="statusDetail"></span>
+        </div>
+        <label class="switch" title="Toggle">
+          <input type="checkbox" id="toggle" />
+          <span class="track">
+            <span class="thumb"></span>
+          </span>
+        </label>
+      </section>
+
+      <p class="hint" id="hint"></p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

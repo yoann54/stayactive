@@ -1,0 +1,31 @@
+{
+  "extName": {
+    "message": "StayActive",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Prevents websites from detecting when you switch tabs (Page Visibility API, focus, blur).",
+    "description": "Extension description"
+  },
+  "popupTagline": {
+    "message": "Always-on focus"
+  },
+  "popupSubtitle": {
+    "message": "Websites will think this tab is always active."
+  },
+  "statusOn": {
+    "message": "Active"
+  },
+  "statusOff": {
+    "message": "Paused"
+  },
+  "statusOnDetail": {
+    "message": "Tab visibility is being masked."
+  },
+  "statusOffDetail": {
+    "message": "Sites can detect when you leave."
+  },
+  "hint": {
+    "message": "Reload the page if a site still detects the switch."
+  }
+}

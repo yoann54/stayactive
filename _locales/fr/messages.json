@@ -1,0 +1,31 @@
+{
+  "extName": {
+    "message": "StayActive",
+    "description": "Nom de l'extension"
+  },
+  "extDescription": {
+    "message": "Empêche les sites de détecter quand vous changez d'onglet (Page Visibility API, focus, blur).",
+    "description": "Description de l'extension"
+  },
+  "popupTagline": {
+    "message": "Focus permanent"
+  },
+  "popupSubtitle": {
+    "message": "Les sites croiront que cet onglet est toujours actif."
+  },
+  "statusOn": {
+    "message": "Activé"
+  },
+  "statusOff": {
+    "message": "En pause"
+  },
+  "statusOnDetail": {
+    "message": "La visibilité de l'onglet est masquée."
+  },
+  "statusOffDetail": {
+    "message": "Les sites peuvent détecter votre départ."
+  },
+  "hint": {
+    "message": "Rechargez la page si un site continue de détecter le changement."
+  }
+}
