@@ -25,6 +25,9 @@
   "statusOffDetail": {
     "message": "Sites can detect when you leave."
   },
+  "toggleLabel": {
+    "message": "Mask tab visibility"
+  },
   "hint": {
     "message": "Reload tabs that were open before StayActive was installed."
   }

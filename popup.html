@@ -25,12 +25,12 @@
           <span class="dot"></span>
           <span class="ring"></span>
         </div>
-        <div class="status-text">
+        <div class="status-text" aria-live="polite">
           <span class="status-label" id="statusLabel"></span>
           <span class="status-detail" id="statusDetail"></span>
         </div>
-        <label class="switch" title="Toggle">
-          <input type="checkbox" id="toggle" />
+        <label class="switch" id="switch">
+          <input type="checkbox" role="switch" id="toggle" aria-describedby="statusDetail" />
           <span class="track">
             <span class="thumb"></span>
           </span>

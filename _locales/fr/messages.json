@@ -25,6 +25,9 @@
   "statusOffDetail": {
     "message": "Les sites peuvent détecter votre départ."
   },
+  "toggleLabel": {
+    "message": "Masquer la visibilité de l'onglet"
+  },
   "hint": {
     "message": "Rechargez les onglets ouverts avant l'installation de StayActive."
   }

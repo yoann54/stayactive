@@ -4,11 +4,15 @@ const statusLabel = document.getElementById("statusLabel");
 const statusDetail = document.getElementById("statusDetail");
 const tagline = document.getElementById("tagline");
 const hint = document.getElementById("hint");
+const switchLabel = document.getElementById("switch");
 
 const t = (key) => chrome.i18n.getMessage(key) || key;
 
 tagline.textContent = t("popupTagline");
 hint.textContent = t("hint");
+document.documentElement.lang = chrome.i18n.getUILanguage();
+toggle.setAttribute("aria-label", t("toggleLabel"));
+switchLabel.title = t("toggleLabel");
 
 const render = (enabled) => {
   toggle.checked = !!enabled;
