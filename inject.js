@@ -1,138 +1,70 @@
 (() => {
-  if (window.__focusTabInstalled) return;
-  window.__focusTabInstalled = true;
-
   const STATE = { enabled: true };
-  window.__focusTabState = STATE;
 
-  const docProto = Object.getPrototypeOf(document) || Document.prototype;
+  // Patch the prototype that natively owns the property, so the page sees
+  // no extra own properties on document or HTMLDocument.prototype.
+  const findOwner = (prop) => {
+    for (let o = document; o; o = Object.getPrototypeOf(o)) {
+      if (Object.prototype.hasOwnProperty.call(o, prop)) return o;
+    }
+    return null;
+  };
 
-  const realHasFocus = document.hasFocus.bind(document);
-  const realHiddenDesc =
-    Object.getOwnPropertyDescriptor(docProto, "hidden") ||
-    Object.getOwnPropertyDescriptor(Document.prototype, "hidden");
-  const realVisibilityDesc =
-    Object.getOwnPropertyDescriptor(docProto, "visibilityState") ||
-    Object.getOwnPropertyDescriptor(Document.prototype, "visibilityState");
-  const realWebkitHiddenDesc =
-    Object.getOwnPropertyDescriptor(docProto, "webkitHidden") ||
-    Object.getOwnPropertyDescriptor(Document.prototype, "webkitHidden");
-  const realWebkitVisibilityDesc =
-    Object.getOwnPropertyDescriptor(docProto, "webkitVisibilityState") ||
-    Object.getOwnPropertyDescriptor(Document.prototype, "webkitVisibilityState");
-
-  try {
-    Object.defineProperty(document, "hidden", {
-      configurable: true,
-      get() {
-        if (STATE.enabled) return false;
-        return realHiddenDesc ? realHiddenDesc.get.call(this) : false;
+  // A Proxy keeps the native name, length and toString() of the function.
+  const wrap = (fn, spoofed) =>
+    new Proxy(fn, {
+      apply(target, thisArg, args) {
+        if (STATE.enabled) return spoofed;
+        return Reflect.apply(target, thisArg, args);
       },
     });
-  } catch (_) {}
 
-  try {
-    Object.defineProperty(document, "visibilityState", {
-      configurable: true,
-      get() {
-        if (STATE.enabled) return "visible";
-        return realVisibilityDesc ? realVisibilityDesc.get.call(this) : "visible";
-      },
-    });
-  } catch (_) {}
+  const spoofGetter = (prop, spoofed) => {
+    const owner = findOwner(prop);
+    if (!owner) return;
+    const desc = Object.getOwnPropertyDescriptor(owner, prop);
+    if (!desc.get) return;
+    try {
+      Object.defineProperty(owner, prop, { ...desc, get: wrap(desc.get, spoofed) });
+    } catch (_) {}
+  };
 
-  try {
-    Object.defineProperty(document, "webkitHidden", {
-      configurable: true,
-      get() {
-        if (STATE.enabled) return false;
-        return realWebkitHiddenDesc ? realWebkitHiddenDesc.get.call(this) : false;
-      },
-    });
-  } catch (_) {}
+  spoofGetter("hidden", false);
+  spoofGetter("visibilityState", "visible");
+  spoofGetter("webkitHidden", false);
+  spoofGetter("webkitVisibilityState", "visible");
 
-  try {
-    Object.defineProperty(document, "webkitVisibilityState", {
-      configurable: true,
-      get() {
-        if (STATE.enabled) return "visible";
-        return realWebkitVisibilityDesc
-          ? realWebkitVisibilityDesc.get.call(this)
-          : "visible";
-      },
-    });
-  } catch (_) {}
+  const focusOwner = findOwner("hasFocus");
+  if (focusOwner) {
+    try {
+      const desc = Object.getOwnPropertyDescriptor(focusOwner, "hasFocus");
+      Object.defineProperty(focusOwner, "hasFocus", { ...desc, value: wrap(desc.value, true) });
+    } catch (_) {}
+  }
 
-  try {
-    document.hasFocus = function () {
-      if (STATE.enabled) return true;
-      return realHasFocus();
-    };
-  } catch (_) {}
-
-  const BLOCKED_EVENTS = new Set([
+  const BLOCKED_EVENTS = [
     "visibilitychange",
     "webkitvisibilitychange",
     "blur",
     "focusout",
-    "pagehide",
-    "freeze",
-  ]);
+  ];
 
+  // Registered at document_start, before any page script, as a capture
+  // listener on window: it runs first for every event, so stopping it here
+  // also hides it from addEventListener listeners and on* handlers. Only
+  // events aimed at the window or the document are blocked; blur/focusout on
+  // form fields and other elements must keep working.
   const stopper = (e) => {
     if (!STATE.enabled) return;
-    if (BLOCKED_EVENTS.has(e.type)) {
-      e.stopImmediatePropagation();
-      e.stopPropagation();
-    }
+    if (e.target !== window && e.target !== document) return;
+    e.stopImmediatePropagation();
   };
 
   for (const evt of BLOCKED_EVENTS) {
     window.addEventListener(evt, stopper, true);
-    document.addEventListener(evt, stopper, true);
-  }
-
-  const origAdd = EventTarget.prototype.addEventListener;
-  EventTarget.prototype.addEventListener = function (type, listener, options) {
-    if (
-      STATE.enabled &&
-      typeof type === "string" &&
-      BLOCKED_EVENTS.has(type.toLowerCase()) &&
-      (this === window || this === document)
-    ) {
-      return;
-    }
-    return origAdd.call(this, type, listener, options);
-  };
-
-  const onPropsToNeutralize = ["onvisibilitychange", "onblur", "onpagehide"];
-  for (const prop of onPropsToNeutralize) {
-    try {
-      Object.defineProperty(document, prop, {
-        configurable: true,
-        get() {
-          return null;
-        },
-        set() {
-          /* swallow */
-        },
-      });
-    } catch (_) {}
-    try {
-      Object.defineProperty(window, prop, {
-        configurable: true,
-        get() {
-          return null;
-        },
-        set() {
-          /* swallow */
-        },
-      });
-    } catch (_) {}
   }
 
   window.addEventListener("__focusTabSetState", (e) => {
-    const next = e.detail && typeof e.detail.enabled === "boolean";
-    if (next) STATE.enabled = e.detail.enabled;
+    if (typeof e.detail === "boolean") STATE.enabled = e.detail;
   });
 })();

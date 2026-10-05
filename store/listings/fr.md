@@ -4,7 +4,7 @@
 StayActive
 
 ## Description courte (132 caractères max)
-Empêchez les sites de remarquer que vous avez quitté l'onglet. Les vidéos, pubs et minuteurs ne se mettent plus en pause.
+Empêchez les sites de remarquer que vous avez quitté l'onglet. Vos vidéos et cours ne se mettent plus en pause.
 
 ## Catégorie
 Productivité
@@ -17,8 +17,8 @@ StayActive fait croire aux sites web que l'onglet courant est toujours
 au premier plan, même quand vous passez sur un autre onglet ou une autre
 fenêtre.
 
-Certains sites mettent en pause les vidéos, les pubs ou les minuteurs dès
-que vous partez. StayActive contourne ce comportement en interceptant les
+Certains sites mettent en pause les vidéos, les cours en ligne ou les
+sessions en direct dès que vous partez. StayActive contourne ce comportement en interceptant les
 signaux que le navigateur transmet à la page (Page Visibility API, focus,
 blur).
 
@@ -30,8 +30,10 @@ Fonctionnalités
 
 Comment ça marche
 L'extension remplace document.hidden, document.visibilityState et
-document.hasFocus() et bloque les évènements visibilitychange / blur /
-pagehide pour que la page pense que l'onglet reste actif.
+document.hasFocus() et bloque les évènements visibilitychange et blur de
+la fenêtre pour que la page pense que l'onglet reste actif. Chrome peut
+toutefois continuer à ralentir les minuteurs et animations des onglets
+en arrière-plan.
 
 Confidentialité
 StayActive ne collecte, n'enregistre et ne transmet aucune donnée.
@@ -39,7 +41,7 @@ La seule chose stockée localement est votre préférence on/off.
 
 ## Mots-clés / tags
 onglet actif, anti-pause, lecture continue, focus onglet,
-pub en arrière-plan, page visibility, garder actif
+vidéo en arrière-plan, page visibility, garder actif
 
 ## Objectif unique (pour la revue Chrome Web Store)
 StayActive remplace l'API Page Visibility et les évènements focus/blur

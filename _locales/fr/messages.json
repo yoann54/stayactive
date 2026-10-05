@@ -26,6 +26,6 @@
     "message": "Les sites peuvent détecter votre départ."
   },
   "hint": {
-    "message": "Rechargez la page si un site continue de détecter le changement."
+    "message": "Rechargez les onglets ouverts avant l'installation de StayActive."
   }
 }

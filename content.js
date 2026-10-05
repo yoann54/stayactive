@@ -1,7 +1,7 @@
 (async () => {
   const apply = (enabled) => {
     window.dispatchEvent(
-      new CustomEvent("__focusTabSetState", { detail: { enabled: !!enabled } })
+      new CustomEvent("__focusTabSetState", { detail: !!enabled })
     );
   };
 

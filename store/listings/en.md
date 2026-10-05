@@ -4,7 +4,7 @@
 StayActive
 
 ## Summary (short description, 132 chars max)
-Keep websites convinced your tab is always active. Ads, videos and timers won't pause when you switch tabs.
+Keep websites convinced your tab is always active. Videos and lessons won't pause when you switch tabs.
 
 ## Category
 Productivity
@@ -16,8 +16,8 @@ English
 StayActive keeps the current tab "in focus" from a website's point of view,
 even when you switch to another tab or window.
 
-Some sites pause videos, ads or timers as soon as you leave — StayActive
-prevents that by spoofing the Page Visibility API and focus events the
+Some sites pause videos, online lessons or live sessions as soon as you
+leave — StayActive prevents that by spoofing the Page Visibility API and focus events the
 browser exposes to the page.
 
 Features
@@ -28,8 +28,9 @@ Features
 
 How it works
 The extension overrides document.hidden, document.visibilityState,
-document.hasFocus() and silences visibilitychange / blur / pagehide events
-so the page believes the tab remains active.
+document.hasFocus() and silences the visibilitychange and window blur
+events so the page believes the tab remains active. Note that Chrome may
+still throttle timers and animations in background tabs.
 
 Privacy
 StayActive does not collect, store or transmit any data. The only thing
@@ -37,7 +38,7 @@ it saves locally is your on/off preference.
 
 ## Keywords / tags
 tab focus, page visibility, prevent pause, background tab, keep active,
-no pause, always on, always active, ads keep playing
+no pause, always on, always active, keep playing
 
 ## Single purpose statement (for store review)
 StayActive overrides the Page Visibility API and focus/blur events

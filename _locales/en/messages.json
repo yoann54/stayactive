@@ -26,6 +26,6 @@
     "message": "Sites can detect when you leave."
   },
   "hint": {
-    "message": "Reload the page if a site still detects the switch."
+    "message": "Reload tabs that were open before StayActive was installed."
   }
 }

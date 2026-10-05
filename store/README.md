@@ -45,7 +45,7 @@ ready to publish via GitHub Pages.
 
 1. Push this repository to GitHub.
 2. In the repo settings: **Settings → Pages**.
-3. Under **Source**, select branch `main` and folder `/docs`.
+3. Under **Source**, select branch `master` and folder `/docs`.
 4. Save. After a minute the page will be live at:
 
    ```

@@ -26,10 +26,14 @@ def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
     candidates_bold = [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+        "/usr/share/fonts/TTF/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/noto/NotoSans-Bold.ttf",
     ]
     candidates_regular = [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
         "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        "/usr/share/fonts/TTF/DejaVuSans.ttf",
+        "/usr/share/fonts/noto/NotoSans-Regular.ttf",
     ]
     for path in candidates_bold if bold else candidates_regular:
         if os.path.exists(path):
@@ -166,13 +170,13 @@ def generate_screenshot() -> None:
         d.ellipse((24 + i * 22, 28, 40 + i * 22, 44), fill=color)
     # Tabs
     d.rounded_rectangle((130, 50, 360, 90), radius=8, fill=(255, 255, 255))
-    d.text((150, 62), "YouTube — Watching ad", fill=(60, 64, 72), font=font(13))
+    d.text((150, 62), "Online course — Lesson 3", fill=(60, 64, 72), font=font(13))
     d.rounded_rectangle((370, 56, 540, 86), radius=8, fill=(232, 234, 240))
     d.text((388, 64), "Other tab (focused)", fill=(110, 116, 125), font=font(12))
     # URL bar
     d.rounded_rectangle((130, 100, W - 100, 134), radius=18, fill=(255, 255, 255),
                         outline=(220, 222, 228))
-    d.text((148, 110), "https://example.com/watch?v=abc",
+    d.text((148, 110), "https://example.com/course/lesson-3",
            fill=(70, 76, 86), font=font(13))
 
     # Faux video card
@@ -184,7 +188,7 @@ def generate_screenshot() -> None:
               fill=(255, 255, 255, 220))
     d.polygon([(play_cx - 18, play_cy - 26), (play_cx - 18, play_cy + 26),
                (play_cx + 22, play_cy)], fill=(20, 22, 28))
-    d.text((150, 580), "Ad is playing — even though this tab is in the background.",
+    d.text((150, 580), "Lesson keeps playing — even though this tab is in the background.",
            fill=(40, 44, 52), font=font(22, bold=True))
     d.text((150, 620),
            "StayActive keeps document.hidden = false and silences visibilitychange.",
@@ -212,7 +216,7 @@ def generate_screenshot() -> None:
                          fill=ACCENT)
     pd.ellipse((popup_w - 41, 104, popup_w - 24, 120), fill=WHITE)
 
-    pd.text((16, 165), "Reload the page if a site still detects the switch.",
+    pd.text((16, 165), "Reload tabs that were open before StayActive was installed.",
             fill=FG_SOFT, font=font(10))
 
     popup = soft_shadow(popup)
