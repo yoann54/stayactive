@@ -52,10 +52,11 @@ lorsque l'utilisateur change d'onglet.
 
 ## Justification des permissions
 - storage : stocke la préférence on/off de l'utilisateur en local.
-- host_permissions <all_urls> : le script qui masque la visibilité
+- Content scripts sur <all_urls> : le script qui masque la visibilité
   doit être injecté sur chaque page où l'utilisateur souhaite que la
   fonctionnalité s'applique. L'extension ne lit pas le contenu des
-  pages et ne transmet aucune donnée.
+  pages et ne transmet aucune donnée. Aucune autre permission d'hôte
+  n'est demandée.
 
 ## Déclaration sur l'utilisation des données
 - Informations personnelles identifiables : Non

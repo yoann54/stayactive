@@ -1,4 +1,8 @@
 (() => {
+  // Until content.js reports the stored preference the extension behaves as
+  // enabled, so a tab that starts loading in the background is masked from
+  // its very first script. If the preference turns out to be "off", the page
+  // is told about the real state right away (see setEnabled).
   const STATE = { enabled: true };
 
   // Patch the prototype that natively owns the property, so the page sees
@@ -64,7 +68,39 @@
     window.addEventListener(evt, stopper, true);
   }
 
-  window.addEventListener("__focusTabSetState", (e) => {
-    if (typeof e.detail === "boolean") STATE.enabled = e.detail;
-  });
+  const setEnabled = (enabled) => {
+    if (enabled === STATE.enabled) return;
+    STATE.enabled = enabled;
+    if (enabled) return;
+    // The page has only seen "visible and focused" so far: if that is no
+    // longer true, let it catch up now that the real values show through.
+    if (document.hidden) {
+      document.dispatchEvent(new Event("visibilitychange", { bubbles: true }));
+    }
+    if (!document.hasFocus()) window.dispatchEvent(new Event("blur"));
+  };
+
+  // Private channel with content.js. Both scripts run at document_start,
+  // before any page script, so the handshake completes before the page can
+  // listen or interfere: content.js sends a random event name once (and
+  // retries on READY if it ran first), and only that name is trusted
+  // afterwards. A page cannot toggle the extension without knowing it.
+  const HELLO = "__stayActiveHello";
+  const READY = "__stayActiveReady";
+
+  const onHello = (e) => {
+    if (typeof e.detail !== "string") return;
+    window.removeEventListener(HELLO, onHello, true);
+    e.preventDefault(); // acknowledges receipt to content.js
+    window.addEventListener(
+      e.detail,
+      (ev) => {
+        if (typeof ev.detail === "boolean") setEnabled(ev.detail);
+      },
+      true
+    );
+  };
+
+  window.addEventListener(HELLO, onHello, true);
+  window.dispatchEvent(new CustomEvent(READY));
 })();

@@ -48,9 +48,10 @@ suspending behaviour when the user switches tabs.
 
 ## Permission justifications
 - storage: store the user's on/off preference locally.
-- host_permissions <all_urls>: the visibility-spoofing script must be
+- Content scripts on <all_urls>: the visibility-spoofing script must be
   injected into every page where the user wants the feature to work;
-  the extension does not read page content or transmit any data.
+  the extension does not read page content or transmit any data. No
+  other host permission is requested.
 
 ## Data usage disclosure (Chrome Web Store form)
 - Personally identifiable information: No
