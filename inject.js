@@ -5,6 +5,12 @@
   // is told about the real state right away (see setEnabled).
   const STATE = { enabled: true };
 
+  // Captured before any page script runs, so a page that later replaces
+  // these globals can neither observe nor break the extension.
+  const apply = Reflect.apply;
+  const EventCtor = Event;
+  const dispatch = EventTarget.prototype.dispatchEvent;
+
   // Patch the prototype that natively owns the property, so the page sees
   // no extra own properties on document or HTMLDocument.prototype.
   const findOwner = (prop) => {
@@ -19,17 +25,25 @@
     new Proxy(fn, {
       apply(target, thisArg, args) {
         if (STATE.enabled) return spoofed;
-        return Reflect.apply(target, thisArg, args);
+        return apply(target, thisArg, args);
       },
     });
+
+  // What the page currently sees, read through the patched accessors.
+  const view = {
+    hidden: () => false,
+    hasFocus: () => true,
+  };
 
   const spoofGetter = (prop, spoofed) => {
     const owner = findOwner(prop);
     if (!owner) return;
     const desc = Object.getOwnPropertyDescriptor(owner, prop);
     if (!desc.get) return;
+    const get = wrap(desc.get, spoofed);
     try {
-      Object.defineProperty(owner, prop, { ...desc, get: wrap(desc.get, spoofed) });
+      Object.defineProperty(owner, prop, { ...desc, get });
+      if (prop === "hidden") view.hidden = () => apply(get, document, []);
     } catch (_) {}
   };
 
@@ -42,24 +56,25 @@
   if (focusOwner) {
     try {
       const desc = Object.getOwnPropertyDescriptor(focusOwner, "hasFocus");
-      Object.defineProperty(focusOwner, "hasFocus", { ...desc, value: wrap(desc.value, true) });
+      const value = wrap(desc.value, true);
+      Object.defineProperty(focusOwner, "hasFocus", { ...desc, value });
+      view.hasFocus = () => apply(value, document, []);
     } catch (_) {}
   }
 
-  const BLOCKED_EVENTS = [
-    "visibilitychange",
-    "webkitvisibilitychange",
-    "blur",
-    "focusout",
-  ];
+  // focusout is not listed: it only ever targets elements, never the window
+  // or the document, so the stopper below would let it through anyway.
+  const BLOCKED_EVENTS = ["visibilitychange", "webkitvisibilitychange", "blur"];
 
   // Registered at document_start, before any page script, as a capture
   // listener on window: it runs first for every event, so stopping it here
   // also hides it from addEventListener listeners and on* handlers. Only
   // events aimed at the window or the document are blocked; blur/focusout on
   // form fields and other elements must keep working.
+  let passThrough = false;
+
   const stopper = (e) => {
-    if (!STATE.enabled) return;
+    if (!STATE.enabled || passThrough) return;
     if (e.target !== window && e.target !== document) return;
     e.stopImmediatePropagation();
   };
@@ -68,16 +83,29 @@
     window.addEventListener(evt, stopper, true);
   }
 
+  // Synthetic events let the page catch up; they must get past the stopper.
+  const fire = (target, type, bubbles) => {
+    passThrough = true;
+    try {
+      apply(dispatch, target, [new EventCtor(type, { bubbles })]);
+    } finally {
+      passThrough = false;
+    }
+  };
+
+  // Whenever the switch changes what the page sees, tell it, as the browser
+  // would have. Turning off in a background tab reveals "hidden"; turning on
+  // in a tab the page already knows is hidden must announce "visible", or
+  // the real visibilitychange on return would be blocked and the page would
+  // stay paused.
   const setEnabled = (enabled) => {
     if (enabled === STATE.enabled) return;
+    const wasHidden = view.hidden();
+    const hadFocus = view.hasFocus();
     STATE.enabled = enabled;
-    if (enabled) return;
-    // The page has only seen "visible and focused" so far: if that is no
-    // longer true, let it catch up now that the real values show through.
-    if (document.hidden) {
-      document.dispatchEvent(new Event("visibilitychange", { bubbles: true }));
-    }
-    if (!document.hasFocus()) window.dispatchEvent(new Event("blur"));
+    if (view.hidden() !== wasHidden) fire(document, "visibilitychange", true);
+    const hasFocus = view.hasFocus();
+    if (hasFocus !== hadFocus) fire(window, hasFocus ? "focus" : "blur", false);
   };
 
   // Private channel with content.js. Both scripts run at document_start,

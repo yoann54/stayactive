@@ -10,9 +10,6 @@
   "popupTagline": {
     "message": "Focus permanent"
   },
-  "popupSubtitle": {
-    "message": "Les sites croiront que cet onglet est toujours actif."
-  },
   "statusOn": {
     "message": "Activé"
   },

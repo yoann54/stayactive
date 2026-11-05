@@ -22,11 +22,22 @@ const render = (enabled) => {
 };
 
 (async () => {
-  const { enabled } = await chrome.storage.local.get(["enabled"]);
-  render(enabled !== false);
+  try {
+    const { enabled } = await chrome.storage.local.get(["enabled"]);
+    render(enabled !== false);
+  } catch (err) {
+    console.error(err);
+    render(true); // same default as content.js
+  }
 })();
 
 toggle.addEventListener("change", async () => {
-  await chrome.storage.local.set({ enabled: toggle.checked });
-  render(toggle.checked);
+  const enabled = toggle.checked;
+  try {
+    await chrome.storage.local.set({ enabled });
+    render(enabled);
+  } catch (err) {
+    console.error(err);
+    render(!enabled); // the change was not saved: show the real state
+  }
 });

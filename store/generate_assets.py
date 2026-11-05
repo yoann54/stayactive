@@ -1,7 +1,7 @@
 """Generate Chrome Web Store assets and extension icons for StayActive.
 
 Run from this folder: `python3 generate_assets.py`
-Outputs into ./assets/  and ../  (for the extension icons referenced by manifest)
+Outputs into ./assets/ (store uploads) and ../icons/ (icons referenced by manifest.json)
 """
 from __future__ import annotations
 
@@ -10,8 +10,9 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.join(HERE, "assets")
-EXT_ROOT = os.path.abspath(os.path.join(HERE, ".."))
+EXT_ICONS = os.path.abspath(os.path.join(HERE, "..", "icons"))
 os.makedirs(ASSETS, exist_ok=True)
+os.makedirs(EXT_ICONS, exist_ok=True)
 
 ACCENT = (46, 204, 113)
 ACCENT_DARK = (31, 138, 76)
@@ -72,16 +73,13 @@ def soft_shadow(img: Image.Image, offset=(0, 6), blur=14, opacity=70) -> Image.I
 
 
 def generate_extension_icons() -> None:
-    """Sizes referenced by manifest. Also creates icon.png at 128."""
-    sizes = [16, 32, 48, 128]
-    for s in sizes:
+    """Sizes referenced by manifest.json, written to ../icons/ and ./assets/."""
+    for s in [16, 32, 48, 128]:
         logo = draw_logo(s)
-        path = os.path.join(ASSETS, f"icon-{s}.png")
-        logo.save(path, "PNG")
-        print(f"wrote {path}")
-    # Backwards-compatible single icon used by current manifest
-    draw_logo(128).save(os.path.join(EXT_ROOT, "icon.png"), "PNG")
-    print(f"wrote {os.path.join(EXT_ROOT, 'icon.png')}")
+        for folder in (EXT_ICONS, ASSETS):
+            path = os.path.join(folder, f"icon-{s}.png")
+            logo.save(path, "PNG")
+            print(f"wrote {path}")
 
 
 def generate_store_icon() -> None:

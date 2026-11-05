@@ -237,3 +237,8 @@ body {
     transition: none !important;
   }
 }
+
+/* Hidden until popup.js has read the stored state, to avoid flashing "on". */
+.card:not([data-state]) {
+  visibility: hidden;
+}
